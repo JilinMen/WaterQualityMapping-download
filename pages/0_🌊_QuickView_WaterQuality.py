@@ -7,7 +7,7 @@ from geemap import Map
 import streamlit as st
 import warnings
 import sys
-sys.path.append('/workspaces/WaterQualityMapping')
+sys.path.append('/mount/src/waterqualitymapping')
 import waterquality_functions as wqf
 
 
