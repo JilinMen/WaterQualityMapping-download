@@ -2,7 +2,7 @@ import os
 import sys
 import datetime
 
-sys.path.append(r'/workspaces/WaterQualityMapping/acolite')
+sys.path.append(r'/mount/src/waterqualitymapping/acolite')
 from acolite import gee
 
 ## written by Quinten Vanhellemont, RBINS
