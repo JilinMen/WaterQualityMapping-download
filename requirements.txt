@@ -2,7 +2,7 @@
 # cartopy
 netCDF4
 fiona
-folium==0.13.0
+folium
 geemap==0.35.3
 geopandas
 jupyter-server-proxy
