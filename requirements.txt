@@ -1,8 +1,9 @@
 --find-links=https://girder.github.io/large_image_wheels GDAL
 # cartopy
+netCDF4
 fiona
 folium==0.13.0
-geemap[extra]
+geemap==0.35.3
 geopandas
 jupyter-server-proxy
 keplergl
