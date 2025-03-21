@@ -3,6 +3,7 @@ import sys
 import datetime
 
 sys.path.append(r'/mount/src/waterqualitymapping/acolite')
+print(os.listdir('/mount/src/waterqualitymapping/acolite'))
 from acolite import gee
 
 ## written by Quinten Vanhellemont, RBINS
