@@ -45,7 +45,7 @@ height = 600
 
 with col1:
     st.write("map here")
-    m = Map(center=(35, -95), zoom=4, draw_control=False)
+    m = Map(center=(35, -95), zoom=4)
     
     # 定义计算最大最小经纬度的函数
     if m.st_last_draw:
