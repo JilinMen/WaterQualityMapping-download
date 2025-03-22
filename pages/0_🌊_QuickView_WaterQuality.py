@@ -10,7 +10,6 @@ import sys, os
 sys.path.append(os.path.dirname(__file__))
 import waterquality_functions as wqf
 
-
 st.set_page_config(layout="wide")
 warnings.filterwarnings("ignore")
 
@@ -129,39 +128,39 @@ if button_run:
         print("Processing complete!")
     elif atmospheric_correction.value == 'ACOLITE':
         # with status_output:
-        print("Applying ACOLITE Atmospheric Correction...")
-        collection = wqf.ACOLITE_run(
-                    [min_lat.value, min_lon.value, max_lat.value, max_lon.value],
-                    start_date.value.isoformat(), end_date.value.isoformat(),
-                    ", ".join(sensor.value)
-                    )
-        # Ensure collection and imColl have the same start_time by merging metadata
-        def merge_scl_or_qa_pixel(image, reference_image):
-            if sensor.value == 'S2A_MSI' or sensor.value == 'S2B_MSI':
-                flag_band = 'SCL'
-            else:
-                flag_band = 'QA_PIXEL'
-            # Merge the SCL or QA_PIXEL from imColl to ACOLITE collection
-            scl_or_qa_pixel = reference_image.select(flag_band).rename(flag_band)  # Or use QA_PIXEL if needed
-            return image.addBands(scl_or_qa_pixel)
+        st.write("Applying ACOLITE Atmospheric Correction...")
+        # collection = wqf.ACOLITE_run(
+        #             [min_lat.value, min_lon.value, max_lat.value, max_lon.value],
+        #             start_date.value.isoformat(), end_date.value.isoformat(),
+        #             ", ".join(sensor.value)
+        #             )
+        # # Ensure collection and imColl have the same start_time by merging metadata
+        # def merge_scl_or_qa_pixel(image, reference_image):
+        #     if sensor.value == 'S2A_MSI' or sensor.value == 'S2B_MSI':
+        #         flag_band = 'SCL'
+        #     else:
+        #         flag_band = 'QA_PIXEL'
+        #     # Merge the SCL or QA_PIXEL from imColl to ACOLITE collection
+        #     scl_or_qa_pixel = reference_image.select(flag_band).rename(flag_band)  # Or use QA_PIXEL if needed
+        #     return image.addBands(scl_or_qa_pixel)
 
-        # Apply the merging function to ensure that both collections have the same SCL/QA_PIXEL
-        collection = collection.map(lambda image: merge_scl_or_qa_pixel(image,imColl.filterDate(image.get('time_start')).first()))
+        # # Apply the merging function to ensure that both collections have the same SCL/QA_PIXEL
+        # collection = collection.map(lambda image: merge_scl_or_qa_pixel(image,imColl.filterDate(image.get('time_start')).first()))
         
-        print("Atmospheric correction complete!")
+        # print("Atmospheric correction complete!")
         
-        collection_day = wqf.merge_by_day(collection)
+        # collection_day = wqf.merge_by_day(collection)
 
-        # mask clouds and land
-        water_extracted_collection = collection_day.map(wqf.mask_water)
-        print("Band names after masking: ",water_extracted_collection.first().bandNames().getInfo())
+        # # mask clouds and land
+        # water_extracted_collection = collection_day.map(wqf.mask_water)
+        # print("Band names after masking: ",water_extracted_collection.first().bandNames().getInfo())
 
-        # RGB preview
-        print('start to map RGB image!')
-        wqf.preview_rgb_image(collection_day)
-        print('start to map water quality parameters!')
-        wqf.show_wq(water_extracted_collection)
-        print("Processing complete!")
+        # # RGB preview
+        # print('start to map RGB image!')
+        # wqf.preview_rgb_image(collection_day)
+        # print('start to map water quality parameters!')
+        # wqf.show_wq(water_extracted_collection)
+        # print("Processing complete!")
     else:
         print("Unsupported atmospheric correction method.")
 
