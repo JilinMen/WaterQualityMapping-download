@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
     token = os.getenv(token_name)
     st.write(token)
-    geemap.ee_initialize(token_name=token_name)
+    geemap.ee_initialize(token_name=token_name,project='ee-menjilin')
 
 
 st.sidebar.info(
