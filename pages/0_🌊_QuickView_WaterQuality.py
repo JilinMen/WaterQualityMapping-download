@@ -14,18 +14,53 @@ st.set_page_config(layout="wide")
 warnings.filterwarnings("ignore")
 
 @st.cache_data
-def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
+def ee_authenticate(token_name: str = "EARTHENGINE_TOKEN",
+    auth_mode: Optional[str] = None,
+    auth_args: Optional[Dict[str, Any]] = None,
+    user_agent_prefix: str = "geemap",
+    project: Optional[str] = None,
+    **kwargs: Any,
+    ) -> None:):
     import google.oauth2.credentials
-    token = os.getenv(token_name)
-    st.write(token)
-    # geemap.ee_initialize(token_name=token_name)
-    credentials = google.oauth2.credentials.Credentials(
-                None,
-                token_uri="https://oauth2.googleapis.com/token",
-                refresh_token=token
-            )
-    
-    ee.Initialize(credentials=credentials,**kwargs)
+    from .__init__ import __version__
+
+    user_agent = f"{user_agent_prefix}/{__version__}"
+    ee.data.setUserAgent(user_agent)
+
+    if ee.data._credentials is not None:
+        return
+        
+    ee_token = os.getenv(token_name)
+    if ee_token is not None:
+        credentials = google.oauth2.credentials.Credentials(
+            None,
+            token_uri="https://oauth2.googleapis.com/token",
+            refresh_token=ee_token
+        )
+
+        ee.Initialize(credentials=credentials, **kwargs)
+        return
+
+    if auth_args is None:
+        auth_args = {}
+
+    if project is None:
+        kwargs["project"] = get_env_var("EE_PROJECT_ID")
+    else:
+        kwargs["project"] = project
+
+    if auth_mode is None:
+        if in_colab_shell() and (ee.data._credentials is None):
+            ee.Authenticate()
+            ee.Initialize(**kwargs)
+            return
+        else:
+            auth_mode = "notebook"
+
+    auth_args["auth_mode"] = auth_mode
+
+    ee.Authenticate(**auth_args)
+    ee.Initialize(**kwargs)
 
 
 st.sidebar.info(
