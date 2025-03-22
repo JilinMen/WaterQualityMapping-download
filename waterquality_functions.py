@@ -1,9 +1,11 @@
 import os
 import sys
 import datetime
-
+from pathlib import Path
+import streamlit as st
+st.write("file path: ",os.path.dirname(__file__))
 sys.path.append(r'/mount/src/waterqualitymapping/acolite')
-print(os.listdir('/mount/src/waterqualitymapping/acolite'))
+
 from acolite import gee
 
 ## written by Quinten Vanhellemont, RBINS
