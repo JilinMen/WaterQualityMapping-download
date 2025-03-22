@@ -15,10 +15,10 @@ warnings.filterwarnings("ignore")
 
 @st.cache_data
 def ee_authenticate(token_name: str = "EARTHENGINE_TOKEN",
-    auth_mode: Optional[str] = None,
-    auth_args: Optional[Dict[str, Any]] = None,
+    auth_mode: str = None,
+    auth_args: str = None,
     user_agent_prefix: str = "geemap",
-    project: Optional[str] = None,
+    project: str = None,
     **kwargs: Any,
     ) -> None:
     import google.oauth2.credentials
