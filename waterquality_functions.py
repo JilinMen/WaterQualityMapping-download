@@ -765,3 +765,53 @@ def on_draw(event):
         min_lat, min_lon, max_lat, max_lon = get_bounding_box(coordinates)
         
     return min_lat, min_lon, max_lat, max_lon
+
+def get_bounding_box(st_last_draw):
+    """
+    从 st_last_draw 解析最大外接矩形的坐标（支持矩形、圆和点）。
+    
+    参数:
+        st_last_draw (dict): 用户最近绘制的几何对象 (GeoJSON 格式)。
+    
+    返回:
+        bbox_coords (list): 最大外接矩形的四个角点坐标 [[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]]
+        bbox_dict (dict): 以字典形式返回 {xmin, ymin, xmax, ymax}
+    """
+    if not st_last_draw:
+        return None, None, None, None  # 没有绘制任何图形
+
+    geometry = st_last_draw.get("geometry", {})
+    geometry_type = geometry.get("type")
+    
+    # 如果是矩形 (Polygon)
+    if geometry_type == "Polygon":
+        coords = geometry["coordinates"][0]  # 第 0 组是外边界
+        lons = [point[0] for point in coords]
+        lats = [point[1] for point in coords]
+
+        # 计算外接矩形 (Bounding Box)
+        xmin, xmax = min(lons), max(lons)
+        ymin, ymax = min(lats), max(lats)
+
+    # 如果是圆形 (Circle)
+    elif geometry_type == "Circle":
+        center = geometry["coordinates"]
+        radius = geometry["radius"]
+        
+        # 计算圆的最大外接矩形 (Bounding Box)
+        xmin = center[0] - radius
+        xmax = center[0] + radius
+        ymin = center[1] - radius
+        ymax = center[1] + radius
+
+    # 如果是点 (Point)
+    elif geometry_type == "Point":
+        coords = geometry["coordinates"]
+        xmin,xmax,ymin,ymax = coords[0],coords[0],coords[1],coords[1]
+
+    else:
+        return None, None, None, None  # 不支持的几何类型
+
+    return [[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]]
+
+
