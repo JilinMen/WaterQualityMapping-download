@@ -25,7 +25,7 @@ def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
                 refresh_token=token
             )
     
-    ee.Initialize(credentials=credentials)
+    ee.Initialize(credentials=credentials,**kwargs)
 
 
 st.sidebar.info(
