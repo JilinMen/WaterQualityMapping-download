@@ -23,10 +23,10 @@ def ee_authenticate(token_name: str = "EARTHENGINE_TOKEN",
     **kwargs: Any,
     ) -> None:
     import google.oauth2.credentials
-    from .__init__ import __version__
+    # from .__init__ import __version__
     
-    user_agent = f"{user_agent_prefix}/{__version__}"
-    ee.data.setUserAgent(user_agent)
+    # user_agent = f"{user_agent_prefix}/{__version__}"
+    # ee.data.setUserAgent(user_agent)
 
     if ee.data._credentials is not None:
         return
