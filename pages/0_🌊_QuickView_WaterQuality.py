@@ -6,7 +6,7 @@ from geemap import Map
 
 import streamlit as st
 import warnings
-import sys
+import sys, os
 sys.path.append(os.path.dirname(__file__))
 import waterquality_functions as wqf
 
