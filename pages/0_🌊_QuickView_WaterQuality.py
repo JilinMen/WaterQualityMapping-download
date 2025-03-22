@@ -9,21 +9,22 @@ import warnings
 import sys, os
 sys.path.append(os.path.dirname(__file__))
 import waterquality_functions as wqf
+from typing import Any, Optional, Dict
 
 st.set_page_config(layout="wide")
 warnings.filterwarnings("ignore")
 
 @st.cache_data
 def ee_authenticate(token_name: str = "EARTHENGINE_TOKEN",
-    auth_mode: str = None,
-    auth_args: str = None,
+    auth_mode: Optional[str] = None,
+    auth_args: Optional[Dict[str, Any]] = None,
     user_agent_prefix: str = "geemap",
-    project: str = None,
+    project: Optional[str] = None,
     **kwargs: Any,
     ) -> None:
     import google.oauth2.credentials
     from .__init__ import __version__
-
+    
     user_agent = f"{user_agent_prefix}/{__version__}"
     ee.data.setUserAgent(user_agent)
 
