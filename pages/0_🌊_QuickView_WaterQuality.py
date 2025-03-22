@@ -20,7 +20,7 @@ def ee_authenticate(token_name: str = "EARTHENGINE_TOKEN",
     user_agent_prefix: str = "geemap",
     project: Optional[str] = None,
     **kwargs: Any,
-    ) -> None:):
+    ) -> None:
     import google.oauth2.credentials
     from .__init__ import __version__
 
