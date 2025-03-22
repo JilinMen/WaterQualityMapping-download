@@ -15,9 +15,17 @@ warnings.filterwarnings("ignore")
 
 @st.cache_data
 def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
+    import google.oauth2.credentials
     token = os.getenv(token_name)
     st.write(token)
-    geemap.ee_initialize(token_name=token_name)
+    # geemap.ee_initialize(token_name=token_name)
+    credentials = google.oauth2.credentials.Credentials(
+                None,
+                token_uri="https://oauth2.googleapis.com/token",
+                refresh_token=token
+            )
+    
+    ee.Initialize(credentials=credentials)
 
 
 st.sidebar.info(
