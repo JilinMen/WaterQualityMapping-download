@@ -2,7 +2,7 @@ import ee
 import geemap
 from IPython.display import display
 from ipyleaflet import WidgetControl, DrawControl, TileLayer
-from geemap import Map
+from geemap.foliumap import Map
 
 import streamlit as st
 import warnings
@@ -48,10 +48,8 @@ with col1:
     m = Map(center=(35, -95), zoom=4, draw_control=False)
     
     # 定义计算最大最小经纬度的函数
-    min_lat, min_lon, max_lat, max_lon = m.on_draw(wqf.on_draw)
-
-    # 启用绘图控件
-    m.add_draw_control()
+    if m.st_last_draw:
+        min_lat, min_lon, max_lat, max_lon = m.get_bounding_box(m.st_last_draw)
 
 with col2:
     st.write('Date range:')
