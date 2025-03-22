@@ -2,9 +2,6 @@ import os
 import sys
 import datetime
 from pathlib import Path
-sys.path.append(os.path.join(os.path.dirname(__file__),'acolite'))
-
-from acolite import gee
 
 ## written by Quinten Vanhellemont, RBINS
 def match_scenes(isodate_start, isodate_end=None, day_range=1,
@@ -197,6 +194,9 @@ def ACOLITE_run(limit, isodate_start, isodate_end, sensor,
                 store_output_locally=False,
                 output_format=None
                 ):
+    sys.path.append(os.path.join(os.path.dirname(__file__),'acolite'))
+
+    from acolite import gee
     update_settings(limit,
             isodate_start, isodate_end,
             sensor,
