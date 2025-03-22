@@ -1,5 +1,6 @@
 --find-links=https://girder.github.io/large_image_wheels GDAL
 # cartopy
+pygdal==3.6.2.*
 netCDF4
 fiona
 folium
