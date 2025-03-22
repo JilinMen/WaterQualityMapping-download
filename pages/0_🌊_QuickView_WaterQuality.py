@@ -44,7 +44,7 @@ col1, col2 = st.columns([3,1])
 height = 600
 
 with col1:
-    st.write("map here")
+    ee_authenticate(token_name="EARTHENGINE_TOKEN")
     m = Map(center=(35, -95), zoom=4)
     
     # 定义计算最大最小经纬度的函数
