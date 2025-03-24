@@ -14,9 +14,9 @@ from typing import Any, Optional, Dict
 st.set_page_config(layout="wide")
 warnings.filterwarnings("ignore")
 
-@st.cache_data
-def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
-    geemap.ee_initialize(token_name=token_name)
+# @st.cache_data
+# def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
+#     geemap.ee_initialize(token_name=token_name)
 
 
 st.sidebar.info(
@@ -45,7 +45,15 @@ col1, col2 = st.columns([3,1])
 height = 600
 
 with col1:
-    ee_authenticate(token_name="EARTHENGINE_TOKEN")
+    # ee_authenticate(token_name="EARTHENGINE_TOKEN")
+    import json
+    service_account_info = json.loads(os.environ["GEE_SERVICE_ACCOUNT"])
+    credentials = ee.ServiceAccountCredentials(
+        service_account_info["client_email"], 
+        key_data=json.dumps(service_account_info)
+    )
+    ee.Initialize(credentials)
+
     m = Map(center=(35, -95), zoom=4)
     m.to_streamlit(height=600)
     # 定义计算最大最小经纬度的函数
