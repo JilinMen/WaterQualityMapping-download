@@ -59,7 +59,7 @@ with col1:
     st.write("Draw Features:", st_component)
     import json
     # 获取Streamlit组件
-    draw_features = m.st_draw_features(st_component)  # 获取对应的 streamlit-folium 组件
+    draw_features = m.st_draw_features(st)  # 获取对应的 streamlit-folium 组件
     st.write("Draw features:", draw_features)
     # 调用 st_last_draw() 获取最后一次绘制的结果
     last_draw = m.st_last_draw(st_component)  # 调用方法，传入 st_component
