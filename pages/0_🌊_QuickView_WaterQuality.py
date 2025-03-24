@@ -56,6 +56,9 @@ with col1:
 
     m = Map(center=(35, -95), zoom=4)
     m.to_streamlit(height=600)
+
+    st.write("st_last_draw type:", type(m.st_last_draw))  # 检查数据类型
+    st.write("st_last_draw content:", m.st_last_draw)  # 输出内容
     # 定义计算最大最小经纬度的函数
     if m.st_last_draw:
         min_lat, min_lon, max_lat, max_lon = wqf.get_bounding_box(m.st_last_draw)
