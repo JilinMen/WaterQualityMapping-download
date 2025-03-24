@@ -62,7 +62,7 @@ with col1:
     draw_features = m.st_draw_features  # 获取对应的 streamlit-folium 组件
     st.write("Draw features:", draw_features)
     # 调用 st_last_draw() 获取最后一次绘制的结果
-    last_draw = m.st_last_draw(st_component)  # 调用方法，传入 st_component
+    last_draw = m.st_last_draw()  # 调用方法，传入 st_component
     st.write("Draw last:", last_draw)
         
     # 定义计算最大最小经纬度的函数
