@@ -58,7 +58,7 @@ with col1:
     m.to_streamlit(height=600)
     # 定义计算最大最小经纬度的函数
     if m.st_last_draw:
-        min_lat, min_lon, max_lat, max_lon = m.get_bounding_box(m.st_last_draw)
+        min_lat, min_lon, max_lat, max_lon = wqf.get_bounding_box(m.st_last_draw)
 
 with col2:
     st.write('Date range:')
