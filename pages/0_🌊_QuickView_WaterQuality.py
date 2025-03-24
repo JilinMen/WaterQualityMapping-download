@@ -57,8 +57,22 @@ with col1:
     m = Map(center=(35, -95), zoom=4)
     m.to_streamlit(height=600)
 
-    st.write("st_last_draw type:", type(m.st_last_draw))  # 检查数据类型
-    st.write("st_last_draw content:", m.st_last_draw)  # 输出内容
+    import json
+    # 获取Streamlit组件
+    st_component = m.st_folium  # 获取对应的 streamlit-folium 组件
+    
+    # 调用 st_last_draw() 获取最后一次绘制的结果
+    draw_data = m.st_last_draw(st_component)  # 调用方法，传入 st_component
+    
+    # 尝试解析结果，假设返回的是有效的GeoJSON字符串
+    try:
+        draw_data_json = json.loads(draw_data)  # 将字符串解析为字典
+        geometry = draw_data_json.get("geometry", {})
+        geometry_type = geometry.get("type")  # 获取几何类型
+        st.write("Geometry Type:", geometry_type)
+    except json.JSONDecodeError:
+        st.write("The draw data is not valid JSON.")
+        
     # 定义计算最大最小经纬度的函数
     if m.st_last_draw:
         min_lat, min_lon, max_lat, max_lon = wqf.get_bounding_box(m.st_last_draw)
