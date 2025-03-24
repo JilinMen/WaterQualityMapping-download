@@ -46,12 +46,12 @@ height = 600
 
 with col1:
     # ee_authenticate(token_name="EARTHENGINE_TOKEN")
-    import json
-    service_account_info = json.loads(os.environ["GEE_SERVICE_ACCOUNT"])
-    credentials = ee.ServiceAccountCredentials(
-        service_account_info["client_email"], 
-        key_data=json.dumps(service_account_info)
-    )
+    # 读取 GEE 账号和密钥
+    service_account = st.secrets["GEE_SERVICE_ACCOUNT"]
+    private_key = st.secrets["GEE_PRIVATE_KEY"]
+    
+    # 解析密钥
+    credentials = ee.ServiceAccountCredentials(service_account, key_data=private_key)
     ee.Initialize(credentials)
 
     m = Map(center=(35, -95), zoom=4)
