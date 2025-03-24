@@ -56,6 +56,7 @@ with col1:
 
     m = Map(center=(35, -95), zoom=4)
     st_component = m.to_streamlit(height=600)
+    st.write("Draw Features:", st_component)
     import json
     # 获取Streamlit组件
     draw_features = m.st_draw_features(st_component)  # 获取对应的 streamlit-folium 组件
