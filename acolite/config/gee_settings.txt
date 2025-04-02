@@ -7,11 +7,11 @@ override=False
 st_lon=None
 st_lat=None
 st_box=3 # box size around station to retrieve (approximate in km)
-st_crop=True # crop to box around station
+st_crop=False
 region_name=None # region name for this run
 region_name_add_box=True # add box size to region name
 add_region_name_output=True # create extra directory level with region name
-limit=None # S,W,N,E ROI limits, will be replaced by station box if st_crop and st_lon and st_lat are provided
+limit=33.350606,-87.591944,33.374119,-87.556231
 strict_subset=False # If True crop strict lat/lon rectangle which may not be aligned with image projection
 output_scale=None
 
@@ -22,16 +22,16 @@ tile_size=606,606
 
 ## dates to check
 ## if end date is None, day_range days will be added to start date
-isodate_start=None
-isodate_end=None
+isodate_start=2025-03-02
+isodate_end=2025-04-01
 day_range=1
 
 ## sensors to check, an Image Collection will be made containing all listed
-sensors=L5_TM,L7_ETM,L8_OLI,L9_OLI,S2A_MSI,S2B_MSI
+sensors=L9_OLI
 filter_tiles=None
 
 ## processing settings
-surface_reflectance=False # get standard SR products
+surface_reflectance=False
 run_hybrid_dsf=True # run DSF online on GEE data
 run_offline_dsf=False # run DSF on downloaded data (currently only if hybrid is off)
 subset_aot=True # compute aot over subset (True) or over full scene (False)
@@ -50,7 +50,7 @@ pidx=0 # percentile index
 nbands=3 # number of bands to fit model
 sel_par=taua_cv # parameter to select model
 ## optional glint correction using OSOAA lut
-glint_correction=False
+glint_correction=True
 glint_min=0
 glint_max=0.08
 glint_wind=20
@@ -65,16 +65,16 @@ wind=None
 ancillary_data=False
 
 ## output options
-output=None # target directory
-convert_output=True # convert downloaded subsets
+output=./ACOLITE-output/
+convert_output=False
 clear_output_zip_files=True # remove downloaded subsets
 store_output_google_drive=False
-store_output_locally=True
-store_rhot=True
+store_output_locally=False
+store_rhot=False
 store_rhos=True
-store_geom=True
-store_sr=True
-store_st=True
+store_geom=False
+store_sr=False
+store_st=False
 store_sp=False
 use_scene_name=False
 target_scale=None

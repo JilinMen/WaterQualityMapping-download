@@ -47,6 +47,9 @@ def agh_run(settings={}, acolite_settings=None, rsrd = {}, lutd = {}, return_im=
                                  limit = setg['limit'], st_lat = setg['st_lat'], st_lon = setg['st_lon'])
 
     print('Found images ', len(images), images)
+    print("Image list: ",imColl.aggregate_array('system:index').getInfo())
+    print("Cloud cover: ",imColl.aggregate_array('CLOUDY_PIXEL_PERCENTAGE').getInfo())
+
     if return_im: return(images, imColl)
 
     ## run through images
