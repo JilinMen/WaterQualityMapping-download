@@ -142,14 +142,12 @@ with col3:
     st.number_input("max_lat:", value=st.session_state["max_lat"], key="max_lat")
     st.selectbox("Atmospheric correction:", ["ACOLITE", "SR"], index=0, key="atmospheric_correction")
     st.write("####################")
-    st.write("####################")
+    button_download = st.button("Download")
     button_clear = st.button("Reset")
 
 if button_clear:
 
     st.success("All parameters have been reset!")
-
-
 
 if button_run:
     images, imColl = wqf.match_scenes(
@@ -159,7 +157,7 @@ if button_run:
         st_lat=None, st_lon=None, filter_tiles=None,
         sensors=st.session_state['sensor']
     )
-
+    st.session_state['filename'] = imColl.aggregate_array('system:index').getInfo()
     st.write("Total images:", len(images))
     # st.write("Image list: ",imColl.aggregate_array('system:index').getInfo())
     # st.write("Cloud cover: ",imColl.aggregate_array('CLOUD_COVER').getInfo())
@@ -191,6 +189,9 @@ if button_run:
             # print(collection_day.first().bandNames().getInfo())
             # mask clouds and land
             water_extracted_collection = collection_day.map(wqf.mask_water)
+
+            st.session_state['collection'] = collection_day
+
             print("Property names: ",water_extracted_collection.first().propertyNames().getInfo())
             print("Mosaic image list: ",water_extracted_collection.aggregate_array('custom_id').getInfo())
             # print("water_extracted_collection size: ",water_extracted_collection.size().getInfo())
@@ -212,8 +213,27 @@ if button_run:
                         )
             print("Atmospheric correction complete!")
             print("collection after acolite: ", collection.first().bandNames().getInfo())
-            print("type: ",type(st.session_state['sensor']))
-            print("check: ", 'S2A_MSI' in st.session_state['sensor'])
+            # print("crs of imcoll: ",collection.first().propertyNames().getInfo())
+
+            def transfer_properties(image):
+                # inherit properties from collection
+                time_start = image.get("time_start")
+                matched_image = imColl.filter(ee.Filter.eq("system:time_start", time_start)).first()  # 在 B 中查找匹配影像
+
+                # 如果找到匹配影像，则继承其几何边界，并复制 system:index
+                def apply_changes(matched_image):
+                    return (image
+                            .clip(matched_image.geometry())
+                            .copyProperties(matched_image, matched_image.propertyNames())
+                            .set("system:index", matched_image.get("system:index")))
+
+                return ee.Image(ee.Algorithms.If(matched_image, apply_changes(matched_image), image))
+
+            collection = collection.map(transfer_properties)
+            print("before: ", imColl.aggregate_array("system:index").getInfo())
+            print("after: ",collection.aggregate_array("system:index").getInfo())
+
+            print("properties of inherit: ", collection.first().getInfo())
 
             # Ensure collection and imColl have the same start_time by merging metadata
             def merge_scl_or_qa_pixel(image, reference_image):
@@ -235,6 +255,10 @@ if button_run:
 
             # mask clouds and land
             water_extracted_collection = collection_day.map(wqf.mask_water)
+
+            st.session_state['collection'] = collection_day
+
+            print("collection_day size: ", collection_day.size().getInfo())
             print("Band names after masking: ",water_extracted_collection.first().bandNames().getInfo())
 
             # RGB preview
@@ -292,22 +316,38 @@ if button_run:
             st.session_state['vis_turbidity'] = {
                 "width": 2.5,
                 "height": 0.3,
-                "vmin": st.session_state['turbidity_low'],  # 颜色条的最小值
-                "vmax": st.session_state['turbidity_up'],  # 颜色条的最大值
+                "vmin": st.session_state['turbidity_low'],
+                "vmax": st.session_state['turbidity_up'],
                 "orientation": "horizontal",
                 "label": "Turbidity (NTU)",
                 # "cmap": "rainbow",
                 "palette": ["#7400b8", "#5e60ce", "#56cfe1", "#80ffdb", "#38b000", "#006400", "#ffb627", "#f85e00",
-                            "#800f2f"],  # 颜色渐变
+                            "#800f2f"],
             }
             st.session_state['m'].add_colormap(position=(73, 46), **st.session_state['vis_turbidity'])
+
+if button_download:
+    import traceback
+    try:
+        type_data = type(st.session_state['collection'])
+        out_dir = "./download"
+
+        if not os.path.exists(out_dir): os.mkdir(out_dir)
+        print("data type: ", type_data)
+
+        if type_data == ee.ImageCollection:
+            geemap.download_ee_image_collection(st.session_state['collection'],out_dir,filenames=st.session_state['filename'],scale=100)
+        elif type_data == ee.Image:
+            geemap.download_ee_image(st.session_state['collection'], "landsat-test.tif", scale=100)
+        else:
+            print("data type error")
+    except Exception as e:
+        st.warning(f"Downloading failed! Error: {e}")
+        traceback.print_exc()
 
 with col1:
 
     component = st.session_state['m'].to_streamlit(height=600)
-
-# st.write("st_last_draw:", st.session_state['m'].st_last_draw())
-# st.write("st_last_draw:", st.session_state['m'].user_roi())
 
 
 
