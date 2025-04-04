@@ -11,7 +11,7 @@ st_crop=False
 region_name=None # region name for this run
 region_name_add_box=True # add box size to region name
 add_region_name_output=True # create extra directory level with region name
-limit=-0.321348,34.181636,-0.189514,34.382176
+limit=-1.071105,33.250606,-0.488886,33.882444
 strict_subset=False # If True crop strict lat/lon rectangle which may not be aligned with image projection
 output_scale=None
 
@@ -22,12 +22,12 @@ tile_size=606,606
 
 ## dates to check
 ## if end date is None, day_range days will be added to start date
-isodate_start=2025-04-01
-isodate_end=2025-04-02
+isodate_start=2025-03-01
+isodate_end=2025-04-03
 day_range=1
 
 ## sensors to check, an Image Collection will be made containing all listed
-sensors=S2A_MSI
+sensors=L9_OLI
 filter_tiles=None
 
 ## processing settings

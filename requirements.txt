@@ -19,6 +19,7 @@ streamlit-folium
 streamlit-keplergl
 tropycal
 streamlit_folium
+geedim
 # git+https://github.com/giswqs/leafmap
 # git+https://github.com/giswqs/geemap
 

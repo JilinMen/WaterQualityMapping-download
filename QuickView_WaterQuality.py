@@ -14,6 +14,7 @@ import fiona
 import geopandas as gpd
 import numpy as np
 import datetime
+import traceback
 
 st.set_page_config(layout="wide")
 warnings.filterwarnings("ignore")
@@ -132,7 +133,7 @@ with col2:
     st.number_input("min_lat:", value=st.session_state["min_lat"], key="min_lat")
     st.selectbox('Sensor:',["L8_OLI","L9_OLI","S2A_MSI","S2B_MSI"],index=0,key="sensor")
     st.multiselect("Bio-optical:",["Chl-a","TSS","CDOM","Turbidity"],default=st.session_state['bios'],key='bios')
-    button_run = st.button("Submit")
+    button_download = st.button("Download")
 
 with col3:
     st.write("####################")
@@ -142,7 +143,7 @@ with col3:
     st.number_input("max_lat:", value=st.session_state["max_lat"], key="max_lat")
     st.selectbox("Atmospheric correction:", ["ACOLITE", "SR"], index=0, key="atmospheric_correction")
     st.write("####################")
-    button_download = st.button("Download")
+    button_run = st.button("Submit")
     button_clear = st.button("Reset")
 
 if button_clear:
@@ -327,7 +328,6 @@ if button_run:
             st.session_state['m'].add_colormap(position=(73, 46), **st.session_state['vis_turbidity'])
 
 if button_download:
-    import traceback
     try:
         type_data = type(st.session_state['collection'])
         out_dir = "./download"
@@ -336,7 +336,7 @@ if button_download:
         print("data type: ", type_data)
 
         if type_data == ee.ImageCollection:
-            geemap.download_ee_image_collection(st.session_state['collection'],out_dir,filenames=st.session_state['filename'],scale=100)
+            geemap.download_ee_image_collection(st.session_state['collection'],out_dir,filenames=st.session_state['filename'],scale=30)
         elif type_data == ee.Image:
             geemap.download_ee_image(st.session_state['collection'], "landsat-test.tif", scale=100)
         else:
